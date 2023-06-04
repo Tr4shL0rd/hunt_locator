@@ -3,21 +3,18 @@ import requests
 import sys
 import webbrowser
 from pyperclip import copy
-
+TARGET = None
+if len(sys.argv) == 1:
+    TARGET = "_".join(input("Target: ")).title()
 BASE_URL = "https://ffxiv.consolegameswiki.com/wiki/"
 TARGET = "_".join(sys.argv[1:]).title()
 URL = f"{BASE_URL}{TARGET}"
 page = requests.get(URL)
-#print("DEBUG:", URL)
 soup = BeautifulSoup(page.content, "html.parser")
 location_tables = soup.find(class_="location table")
 fates = soup.find(id="FATEs")
 trs = location_tables.find_all("tr")[1:]
 
-if fates is not None:
-    open_page = input(f'{TARGET.replace("_", " ")} may be FATE exclusive. want to open the wiki page? [Y/n]: ').lower() or "y"
-    if open_page.lower() == "y" or open_page.lower() == "":
-        webbrowser.open(URL)
 
 for tr in trs:
     tr_text = tr.text.strip().replace("\n", " ").replace("(", " ").replace(")", " ")
@@ -36,3 +33,7 @@ for tr in trs:
     print("Coordinates:", "".join(coordinates))
     print("Level:", level)
     print()
+if fates is not None:
+    open_page = input(f'{TARGET.replace("_", " ")} may be FATE exclusive. want to open the wiki page? [Y/n]: ').lower() or "y"
+    if open_page.lower() == "y" or open_page.lower() == "":
+        webbrowser.open(URL)
