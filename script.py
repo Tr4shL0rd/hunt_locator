@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup 
 import requests
 import sys
+import webbrowser
 from pyperclip import copy
 
 BASE_URL = "https://ffxiv.consolegameswiki.com/wiki/"
@@ -10,8 +11,14 @@ page = requests.get(URL)
 #print("DEBUG:", URL)
 soup = BeautifulSoup(page.content, "html.parser")
 location_tables = soup.find(class_="location table")
+fates = soup.find(id="FATEs")
 trs = location_tables.find_all("tr")[1:]
-#print(trs)
+
+if fates is not None:
+    open_page = input(f'{TARGET.replace("_", " ")} may be FATE exclusive. want to open the wiki page? [Y/n]: ').lower() or "y"
+    if open_page.lower() == "y" or open_page.lower() == "":
+        webbrowser.open(URL)
+
 for tr in trs:
     tr_text = tr.text.strip().replace("\n", " ").replace("(", " ").replace(")", " ")
     tr_data = tr_text.split()
