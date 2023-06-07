@@ -15,11 +15,11 @@ location_tables = soup.find(class_="location table")
 fates = soup.find(id="FATEs")
 trs = location_tables.find_all("tr")[1:]
 
-
-for tr in trs:
+locations = []
+for location_id,tr in enumerate(trs,start=1):
     tr_text = tr.text.strip().replace("\n", " ").replace("(", " ").replace(")", " ")
     tr_data = tr_text.split()
-    zone_name = ' '.join(tr_data[:-3])
+    zone_name = " ".join(tr_data[:-3])
     coordinates = tr_data[-3:-1]
     #½print(coordinates)
     if "Unknown" in coordinates:
@@ -28,12 +28,24 @@ for tr in trs:
     if "Unknown" not in coordinates:
         copy(f"{''.join(coordinates)} : {zone_name}")
     #print(zone_name)
-    level = tr_data[-1]
-    print("Zone Name:", zone_name)
-    print("Coordinates:", "".join(coordinates))
-    print("Level:", level)
+    level_range = tr_data[-1]
+    coords = "".join(coordinates)
+    print(f"location id: {location_id}")
+    print(f"Zone Name: {zone_name}")
+    print(f"Coordinates: {coords}")
+    print(f"Level range: {level_range}")
     print()
+    locations.append(f"{coords} : {zone_name}")
+if len(locations) > 1:
+    location_choice = int(input(f"more than one location. please select a location[1-{len(locations)}]: ").lower().strip() or 1)-1
+    if location_choice > len(locations):
+        print(f"location id {location_choice} is not valid")
+    elif location_choice == 0:
+        copy(f"/ctp {locations[0]}")
+    else:
+        copy(f"/ctp {locations[location_choice]}")
+print(f"selected {locations[location_choice]}")
 if fates is not None:
-    open_page = input(f'{TARGET.replace("_", " ")} may be FATE exclusive. want to open the wiki page? [Y/n]: ').lower() or "y"
+    open_page = input(f'{TARGET.replace("_", " ")} may be FATE exclusive. Open wiki page? [Y/n]: ').lower() or "y"
     if open_page.lower() == "y" or open_page.lower() == "":
         webbrowser.open(URL)
