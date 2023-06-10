@@ -44,7 +44,7 @@ if len(locations) > 1:
         copy(f"/ctp {locations[0]}")
     else:
         copy(f"/ctp {locations[location_choice]}")
-print(f"selected {locations[location_choice]}")
+    print(f"selected {locations[location_choice]}")
 if fates is not None:
     open_page = input(f'{TARGET.replace("_", " ")} may be FATE exclusive. Open wiki page? [Y/n]: ').lower() or "y"
     if open_page.lower() == "y" or open_page.lower() == "":
