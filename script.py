@@ -33,7 +33,7 @@ def get_info():
                 # replace word at index
                 target_name_split[target_name_split.index(word)] = bad_word.lower()
     # fix for targets with hyphens in name (probably broken)
-    if len(target.split()) == 1:
+    if len(target.split("_")) == 1:
         target = target.lower()
     URL = f"{BASE_URL}{target}"
     page = requests.get(URL)
