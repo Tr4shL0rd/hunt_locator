@@ -13,6 +13,7 @@ def is_page(soup_var:any):
         return True
     #print("There is currently no text in this page." in no_article[0].text)
     return False if "There is currently no text in this page." in no_article[0].text else True
+
 def get_info():
 
     LOWER_CASE_WORDS = ["of", "the"]
@@ -27,14 +28,14 @@ def get_info():
     #TODO: really stupid double nesting. use ZIP instead!
     for bad_word in LOWER_CASE_WORDS:
         for word in target_name_split:
+
             if bad_word.lower() == word.lower():
                 # replace word at index
                 target_name_split[target_name_split.index(word)] = bad_word.lower()
-    # makes target string URL-valid again
-    target = "_".join(target_name_split)
-
+    # fix for targets with hyphens in name (probably broken)
+    if len(target.split()) == 1:
+        target = target.lower()
     URL = f"{BASE_URL}{target}"
-    #print(target)
     page = requests.get(URL)
     soup = BeautifulSoup(page.content, "html.parser")
     if not is_page(soup):
