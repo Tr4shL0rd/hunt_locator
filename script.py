@@ -22,7 +22,8 @@ def get_info():
     if len(sys.argv) == 1:
         target = "_".join(input("Target: ")).title()
     target = "_".join(sys.argv[1:]).title()
-
+    if "'S" in target:
+        target = target.replace("'S", "'s")
     # convert target string to a list
     target_name_split = target.split("_")
     #TODO: really stupid double nesting. use ZIP instead!
