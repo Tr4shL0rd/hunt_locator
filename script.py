@@ -14,6 +14,14 @@ def is_page(soup_var:any):
     #print("There is currently no text in this page." in no_article[0].text)
     return False if "There is currently no text in this page." in no_article[0].text else True
 
+def better_name(string:str)->str:
+    """makes the letter after ' lowecase"""
+    if "'" in string:
+        index_after_apostrophe = string.index("'")+1
+        return f"{string[:index_after_apostrophe-1]}'{string[index_after_apostrophe].lower()}{string[index_after_apostrophe+1:]}"
+    else:
+        return string
+
 def get_info():
 
     LOWER_CASE_WORDS = ["of", "the"]
@@ -22,6 +30,7 @@ def get_info():
     if len(sys.argv) == 1:
         target = "_".join(input("Target: ")).title()
     target = "_".join(sys.argv[1:]).title()
+    target = better_name(target)
     if "'S" in target:
         target = target.replace("'S", "'s")
     # convert target string to a list
